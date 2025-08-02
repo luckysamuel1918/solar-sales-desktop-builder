@@ -1,0 +1,38 @@
+name: Build Solar Sales Desktop App
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '18'
+
+    - name: Install Nativefier
+      run: npm install -g nativefier
+
+    - name: Build App for Linux
+      run: nativefier --name "Solar Sales Manager" "https://lucky-37ad9.web.app" --platform linux
+
+    - name: Build App for Windows
+      run: nativefier --name "Solar Sales Manager" "https://lucky-37ad9.web.app" --platform windows
+
+    - name: Build App for macOS
+      run: nativefier --name "Solar Sales Manager" "https://lucky-37ad9.web.app" --platform mac
+
+    - name: Upload Installers
+      uses: actions/upload-artifact@v2
+      with:
+        name: Solar-Sales-Desktop
+        path: |
+          *-linux-x64/
+          *-win32-x64/
+          *-darwin-x64/
